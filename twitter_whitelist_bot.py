@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import random
 
+# 创建数据库连接
 engine = create_engine('mysql+pymysql://root:123456@127.0.0.1:3306/db?charset=utf8')
 Base = declarative_base()
 Session = sessionmaker(bind=engine)
@@ -31,10 +32,15 @@ class TwitterBot(Base):
     __tablename__ = "twitter_bot"  # 数据库中保存的表名字
 
     id = Column(Integer, index=True, primary_key=True)
-    tweet_id = Column(Integer, nullable=True)
+    # Integer保存不了长ID,改用varchar类型
+    tweet_id = Column(String(30), nullable=True)
     screen_name = Column(String(200), nullable=True)
     url = Column(String(300), nullable=True)
     updated_at = Column(DateTime, default=datetime.now)
+  
+  
+# 创建数据库表，只需要执行一次
+# Base.metadata.create_all(engine)
 
 
 while True:
@@ -46,6 +52,7 @@ while True:
     try:
         # public_tweets = api.home_timeline(count=50, tweet_mode='extended')
         # public_tweets = api.user_timeline(screen_name='reinkerte31', count=3, tweet_mode='extended')
+        # 获取列表中的前100条推文保存到public_tweets中 list_id为推特列表
         public_tweets = api.list_timeline(list_id=1444116199432806401, count=100, tweet_mode='extended')
 
     except Exception as e:
@@ -74,6 +81,7 @@ while True:
             user_mentions = tweet.entities['user_mentions']
             for friend in user_mentions:
                 screen_name = friend['screen_name']
+                # 将zlexdl替换为自己的screen_name
                 screen_names = ["zlexdl", screen_name]
                 friendships = api.lookup_friendships(screen_name=screen_names)
 
@@ -91,6 +99,8 @@ while True:
                 api.create_favorite(id=tweet.id_str)
             except Exception as e:
                 print(str(e))
+            
+            # tweets中保存了转推的文案，修改成自己的，可以多添加几条
             tweets = [
                 'It would be an honor to be a part of your project! You are frontrunners in the game, you have in me a loyal supporter who always gives. Keep it up, much love! @petechang1113 @abc_noName1 @kevinLiuA1110 @tastydogclub @Adidasshow78 @mike1021031',
                 '@Tony34108142 @waynechen2032 @Macnotmc1 @sodassdf @Ro0dZz @chou22389047 @stone20213  if my luck could ever carry me now would be the time',
