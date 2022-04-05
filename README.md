@@ -7,3 +7,4 @@
 视频演示：  
 [1-推特开发者账号申请](https://www.bilibili.com/video/BV13q4y1a7at)  
 [2-开发者账号配置，获取API KEY](https://www.bilibili.com/video/BV1m34y1s7Jh)  
+[3-修改脚本，运行实例，实现白名单抽奖机器人](https://www.bilibili.com/video/BV1cq4y1a7v3)
